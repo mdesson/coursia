@@ -20,11 +20,13 @@
                 <td><%= "Course Code" %></td>
                 <td><%= "Prerequisites" %></td>
             </tr>
+            <% for (var i=0; i<course.length; i++) { %>
             <tr>
-                <td><%= course.title %></td>
-                <td><%= `${course.subject} ${course.catalog}` %></td>
-                <td><%= course.prerequisites %></td>
+                <td><%= course[i].title %></td>
+                <td><%= `${course[i].subject} ${course[i].catalog}` %></td>
+                <td><%= course[i].prerequisites %></td>
             </tr>
+            <% } %>
         </table>
     <% } %>
     <% if (error !== null){ %>

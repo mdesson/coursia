@@ -22,17 +22,18 @@ app.get('/', function (req, res) {
 app.post('/', function (req, res) {
     let subject = req.body.subject
     let catalog = req.body.catalog
-    let career = "*"
+    let career, courseid = "*"
+    let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/${subject}/${catalog}`
     let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/${career}`
     let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
         let courses = JSON.parse(body)
-        console.log(courses[0])
-        
+        console.log(courses)
+
         if (err) {res.render('index', {course: null, error: "Error, please try again"})}
-        if (courses[0] == undefined) {res.render('index', {course: null, error: "Course not found. Please try again."})}
+        if (courses == undefined) {res.render('index', {course: null, error: "Course not found. Please try again."})}
         else {
-            res.render('index', {course: courses[0], error: null})
+            res.render('index', {course: courses, error: null})
         }
     })
 
