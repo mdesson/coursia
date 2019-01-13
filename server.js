@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs')
 
 app.get('/', function (req, res) {
-    res.render('index', {course: null})
+    res.render('index', {course: null, error: null})
 })
 
 app.post('/', function (req, res) {
@@ -26,11 +26,13 @@ app.post('/', function (req, res) {
     let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/${career}`
     let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
-        if(err) console.log(err)
+        let courses = JSON.parse(body)
+        console.log(courses[0])
+        
+        if (err) {res.render('index', {course: null, error: "Error, please try again"})}
+        if (courses[0] == undefined) {res.render('index', {course: null, error: "Course not found. Please try again."})}
         else {
-            let courses = JSON.parse(body)
-            console.log(courses[0])
-            res.render('index', {course: courses[0]})
+            res.render('index', {course: courses[0], error: null})
         }
     })
 
