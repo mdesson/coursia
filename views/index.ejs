@@ -7,17 +7,25 @@
 </head>
 <body>
     <h1>Coursia</h1>
+    <p>Enter the course code in the box below to view its current status.</p>
     <form action="/" method="post">
+        <input name="subject" type="text" placeholder="Enter course code department" required>
+        <input name="catalog" type="text" placeholder="Enter course code number" required>
         <input type="submit" value="Test button">
     </form>
-    <p>Enter the course code in the box below to view its current status.</p>
-    <div id="coursesearch">
-        <p>FORM GOES HERE</p>
-    </div>
-    
-    <div id="searchresults">
-        <p>RESULTS GO HERE</p>
-    </div>
-    
+    <% if (course !== null){ %>
+        <table>
+            <tr>
+                <td><%= "Title" %></td>
+                <td><%= "Course Code" %></td>
+                <td><%= "Prerequisites" %></td>
+            </tr>
+            <tr>
+                <td><%= course.title %></td>
+                <td><%= `${course.subject} ${course.catalog}` %></td>
+                <td><%= course.prerequisites %></td>
+            </tr>
+        </table>
+    <% } %>
 </body>
 </html>
