@@ -22,20 +22,28 @@ app.get('/', function (req, res) {
 app.post('/', function (req, res) {
     let subject = req.body.subject
     let catalog = req.body.catalog
-    let career, courseid = "*"
-    let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/${subject}/${catalog}`
-    let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/${career}`
+    let courseid, desc, sched, cat = "*"
+    
+    let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/*`
+    let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/*/*`
+    let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}`
     let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
+    
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
-        let courses = JSON.parse(body)
-        console.log(courses)
-
-        if (err) {res.render('index', {course: null, error: "Error, please try again"})}
-        if (courses == undefined) {res.render('index', {course: null, error: "Course not found. Please try again."})}
-        else {
-            res.render('index', {course: courses, error: null})
-        }
+        cat = JSON.parse(body)
+        courseid = cat[0].ID
+        console.log("CAT\n" + cat)
     })
+    request( {url: sched_url, headers: {"Authorization": auth}}, function (err, response, body) {
+        sched = JSON.parse(body)
+        console.log("SCHED\n" + sched)    
+    })
+    request( {url: desc_url, headers: {"Authorization": auth}}, function (err, response, body) {
+        desc = JSON.parse(body).description
+        console.log("SCHED\n" + desc)    
+    })
+    
+    res.render('index', {catalog: cat[0], schedule: sched, description: desc, error: null})
 
 })
 
