@@ -29,7 +29,7 @@ app.post('/', function (req, res) {
     let courseid = id.filter(course => course.subject == subject && course.catalog == catalog)[0].ID
     
     // request URLs for open data portal
-    let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/${subject}/${catalog}`
+    let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/*/*`
     let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/*`
     let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}`
     
