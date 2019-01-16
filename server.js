@@ -33,17 +33,18 @@ app.post('/', function (req, res) {
 
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
         cat = JSON.parse(body)
-        console.log("CAT")
+        console.log("REQUEST: course catalog")
     })
     request( {url: sched_url, headers: {"Authorization": auth}}, function (err, response, body) {
         sched = JSON.parse(body)
-        console.log("SCHED") 
+        console.log("REQUEST: schedule") 
     })
     request( {url: desc_url, headers: {"Authorization": auth}}, function (err, response, body) {
         desc = JSON.parse(body).description
-        console.log("DESC")
+        console.log("REQUEST: description")
     })
     res.render('index', {catalog: cat[0], schedule: sched, description: desc, error: null})
+    console.log("RENDER: index, search results")
 })
 
 app.listen(3000, function () {
