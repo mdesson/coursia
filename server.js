@@ -26,6 +26,7 @@ app.post('/', function (req, res) {
     let courseid = id.filter(course => course.subject == subject && course.catalog == catalog)[0].ID
     let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/${subject}/${catalog}`
     let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/*`
+    let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}}*`
     let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
     
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {

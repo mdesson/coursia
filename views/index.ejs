@@ -14,11 +14,11 @@
         <input type="submit" value="Test button">
     </form>
     <% if (course !== null){ %>
-        <table>
+        <table border="1px">
             <tr>
-                <td><%= "Title" %></td>
-                <td><%= "Course Code" %></td>
-                <td><%= "Prerequisites" %></td>
+                <th><%= "Title" %></th>
+                <th><%= "Course Code" %></th>
+                <th><%= "Prerequisites" %></th>
             </tr>
             <% for (var i=0; i<course.length; i++) { %>
             <tr>
