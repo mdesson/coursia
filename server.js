@@ -17,32 +17,40 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs')
 
 app.get('/', function (req, res) {
-    res.render('index', {course: null, error: null})
+    res.render('index', {catalog: null, error: null})
 })
 
 app.post('/', function (req, res) {
+    // form data
     let subject = req.body.subject
     let catalog = req.body.catalog
+    
+    // get courseid from courseids.json
     let courseid = id.filter(course => course.subject == subject && course.catalog == catalog)[0].ID
+    
+    // request URLs for open data portal
     let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/${subject}/${catalog}`
     let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/*`
     let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}`
+    
+    // basic authorization using data from config.json
     let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
     
-    let cat, sched, desc = null
-
-    request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
-        cat = JSON.parse(body)
+    // requests to open data api
+    let cat = request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
         console.log("REQUEST: course catalog")
+        return JSON.parse(body)
     })
-    request( {url: sched_url, headers: {"Authorization": auth}}, function (err, response, body) {
-        sched = JSON.parse(body)
+    let sched = request( {url: sched_url, headers: {"Authorization": auth}}, function (err, response, body) {
         console.log("REQUEST: schedule") 
+        return JSON.parse(body)
     })
-    request( {url: desc_url, headers: {"Authorization": auth}}, function (err, response, body) {
-        desc = JSON.parse(body).description
+    let desc = request( {url: desc_url, headers: {"Authorization": auth}}, function (err, response, body) {
         console.log("REQUEST: description")
+        return JSON.parse(body).description
     })
+
+    // render search results
     res.render('index', {catalog: cat[0], schedule: sched, description: desc, error: null})
     console.log("RENDER: index, search results")
 })
