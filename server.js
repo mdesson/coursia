@@ -26,25 +26,26 @@ app.post('/', function (req, res) {
     let courseid = id.filter(course => course.subject == subject && course.catalog == catalog)[0].ID
     let sched_url = `https://opendata.concordia.ca/API/v1/course/schedule/filter/${courseid}/${subject}/${catalog}`
     let cat_url = `https://opendata.concordia.ca/API/v1/course/catalog/filter/${subject}/${catalog}/*`
-    let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}}*`
+    let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}`
     let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
     
+    let cat, sched, desc = null
+
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
         cat = JSON.parse(body)
-        courseid = cat[0].ID
-        console.log("CAT\n" + cat)
+        console.log("CAT")
+        console.log(cat[0])
+
     })
     request( {url: sched_url, headers: {"Authorization": auth}}, function (err, response, body) {
         sched = JSON.parse(body)
-        console.log("SCHED\n" + sched)    
+        console.log("SCHED") 
     })
     request( {url: desc_url, headers: {"Authorization": auth}}, function (err, response, body) {
         desc = JSON.parse(body).description
-        console.log("SCHED\n" + desc)    
+        console.log("DESC")
     })
-    
     res.render('index', {catalog: cat[0], schedule: sched, description: desc, error: null})
-
 })
 
 app.listen(3000, function () {
