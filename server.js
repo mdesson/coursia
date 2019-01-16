@@ -34,8 +34,6 @@ app.post('/', function (req, res) {
     request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
         cat = JSON.parse(body)
         console.log("CAT")
-        console.log(cat[0])
-
     })
     request( {url: sched_url, headers: {"Authorization": auth}}, function (err, response, body) {
         sched = JSON.parse(body)
