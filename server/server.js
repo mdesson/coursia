@@ -3,18 +3,17 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
-const fs = require('fs');
+const fs = require('fs')
 const app = express()
 
 // load API keys and local settings
-let rawdata = fs.readFileSync('config.json');  
-let config = JSON.parse(rawdata);  
-let id = JSON.parse(fs.readFileSync('./data/courseids.json', 'utf8'));
+let rawdata = fs.readFileSync('config.json')
+let config = JSON.parse(rawdata)  
+let id = JSON.parse(fs.readFileSync('./data/courseids.json', 'utf8'))
 
 // Set up app
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: true}))
-app.set('view engine', 'ejs')
 
 app.get('/', function (req, res) {
     res.render('index', {catalog: null, error: null})
@@ -34,7 +33,7 @@ app.post('/', function (req, res) {
     let desc_url = `https://opendata.concordia.ca/API/v1/course/description/filter/${courseid}`
     
     // basic authorization using data from config.json
-    let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64");
+    let auth = "Basic " + new Buffer(config.apiUser + ":" + config.apiKey).toString("base64")
     
     // requests to open data api
     let cat = request( {url: cat_url, headers: {"Authorization": auth}}, function (err, response, body) {
@@ -55,6 +54,6 @@ app.post('/', function (req, res) {
     console.log("RENDER: index, search results")
 })
 
-app.listen(3000, function () {
-    console.log('Coursia listening on port 3000')
+app.listen(3001, function () {
+    console.log('Coursia listening on port 3001')
 })
