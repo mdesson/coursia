@@ -26,7 +26,9 @@ const SectionSchema = new Schema({
   combinedEnrollmentCap: { type: Number, required: true },
   combinedSectionsId: { type: Number, required: true },
   termCode: { type: Number, required: true },
-  sessionCode: { type: String, required: true }
+  sessionCode: { type: String, required: true },
+  term: { type: Schema.Types.ObjectId, ref: 'Term' },
+  course: { type: Schema.Types.ObjectId, ref: 'Course' }
 })
 
 module.exports = mongoose.model('Section', SectionSchema)
