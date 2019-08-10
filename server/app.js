@@ -10,6 +10,20 @@ var testRouter = require('./routes/test')
 
 var app = express()
 
+// import config file
+var rawConfig = fs.readFileSync('config.json')
+var config = JSON.parse(rawConfig)
+
+// set up mongoose connection
+var mongoose = require('mongoose')
+var mongoDB = `mongodb+srv://${config.dbuser}:${
+  config.dbpass
+}@cluster0-nh0xp.mongodb.net/test?retryWrites=true&w=majority`
+mongoose.connect(mongoDB)
+mongoose.Promise = global.Promise
+var db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+
 // middleware
 app.use(cors())
 app.use(logger('dev'))
