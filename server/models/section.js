@@ -10,25 +10,57 @@ const SectionSchema = new Schema({
   startTime: { type: String },
   room: { type: String },
   building: { type: String },
-  campus: { type: String },
-  status: { type: String, required: true },
+  campus: {
+    type: String,
+    enum: ['loyola', 'sirGeorgeWilliam', 'online', 'power']
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ['active', 'cancelled', 'tentative', 'stopEnrollment']
+  },
   classNumber: { type: Number, required: true },
-  component: { type: String, required: true },
+  component: {
+    type: String,
+    required: true,
+    enum: [
+      'collector',
+      'conference',
+      'lecture',
+      'modular',
+      'online',
+      'practicum',
+      'research',
+      'seminar',
+      'studio',
+      'tutorialLab',
+      'tutorial',
+      'workStudy',
+      'lab',
+      'fieldWord',
+      'fieldStudy',
+      'independentStudy',
+      'reading',
+      'thesisResearch',
+      'regular',
+      'workshop'
+    ]
+  },
   section: { type: String, required: true },
   courseId: { type: Number, required: true },
-  classEnrollmentCap: { type: Number, required: true },
-  classEnrollmentTotal: { type: Number, required: true },
-  classWaitCap: { type: Number, required: true },
-  classWaitTotal: { type: Number, required: true },
-  combinedWaitTotal: { type: Number, required: true },
-  combinedWaitCap: { type: Number, required: true },
-  combinedEnrollmentTotal: { type: Number, required: true },
-  combinedEnrollmentCap: { type: Number, required: true },
-  combinedSectionsId: { type: Number, required: true },
+  classEnrollmentCap: { type: Number },
+  classEnrollmentTotal: { type: Number },
+  classWaitCap: { type: Number },
+  classWaitTotal: { type: Number },
+  combinedWaitTotal: { type: Number },
+  combinedWaitCap: { type: Number },
+  combinedEnrollmentTotal: { type: Number },
+  combinedEnrollmentCap: { type: Number },
+  combinedSectionsId: { type: Number },
   termCode: { type: Number, required: true },
-  sessionCode: { type: String, required: true },
-  term: { type: Schema.Types.ObjectId, ref: 'Term' },
-  course: { type: Schema.Types.ObjectId, ref: 'Course' }
+  sessionCode: { type: String, required: true, enum: ['13W', '26W'] },
+  term: { type: Schema.Types.ObjectId, ref: 'Term', required: true },
+  course: { type: Schema.Types.ObjectId, ref: 'Course', required: true }
 })
 
 module.exports = mongoose.model('Section', SectionSchema)

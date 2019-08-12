@@ -7,10 +7,16 @@ const CourseSchema = new Schema({
   subjectCode: { type: String, required: true, max: 1 },
   numberCode: { type: String, required: true, max: 1 },
   description: { type: String, required: true },
-  degreeLevel: { type: String, required: true, max: 1 },
+  degreeLevel: {
+    type: String,
+    required: true,
+    enum: ['UGRAD', 'GRAD', 'PDEV', 'CCCE']
+  },
   credits: { type: Number, required: true },
   components: { type: [String], required: true },
-  instructionMode: { type: String, required: true, max: 1 }
+  instructionMode: { type: String, required: true, max: 1 },
+  prerequisites: { type: [Schema.Types.ObjectId] },
+  equivalencies: { type: [Schema.Types.ObjectId] }
 })
 
 CourseSchema.vurtial('courseCode').get(

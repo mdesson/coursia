@@ -4,7 +4,11 @@ const Schema = mongoose.Schema
 
 const TermSchema = new Schema({
   year: { type: Number, required: true, min: 1900, max: 9999 },
-  season: { type: String, required: true, max: 6 },
+  season: {
+    type: String,
+    required: true,
+    enum: ['Fall', 'Summer', 'Winter', 'Stpring']
+  },
   code: { type: Number, required: true, max: 9999 }
 })
 
