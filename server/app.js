@@ -6,14 +6,22 @@ var logger = require('morgan')
 var cors = require('cors')
 var fs = require('fs')
 
+// routes
 var indexRouter = require('./routes/index')
 var testRouter = require('./routes/test')
+
+// test script
+var concordiaAPI = require('./public/javascripts/concordiaAPI')
 
 var app = express()
 
 // import config file
 var rawConfig = fs.readFileSync('config.json')
 var config = JSON.parse(rawConfig)
+
+// update db
+console.log(new Date())
+var data = concordiaAPI().then(result => console.log('Updated DB')) // around two minutes
 
 // set up mongoose connection
 var mongoose = require('mongoose')
