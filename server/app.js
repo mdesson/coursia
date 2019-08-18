@@ -20,8 +20,7 @@ var rawConfig = fs.readFileSync('config.json')
 var config = JSON.parse(rawConfig)
 
 // update db
-console.log(new Date())
-var data = concordiaAPI().then(result => console.log('Updated DB')) // around two minutes
+concordiaAPI.requestData().then(() => console.log('Updated DB')) // around two minutes
 
 // set up mongoose connection
 var mongoose = require('mongoose')
@@ -51,7 +50,7 @@ app.use(function(req, res, next) {
 })
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
