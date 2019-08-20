@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
@@ -19,8 +19,6 @@ const CourseSchema = new Schema({
   equivalencies: { type: [Schema.Types.ObjectId] }
 })
 
-CourseSchema.vurtial('courseCode').get(
-  () => `${this.subjectCode} ${this.numberCode}`
-)
+CourseSchema.virtual('courseCode').get(() => `${this.subjectCode} ${this.numberCode}`)
 
 module.exports = mongoose.model('Course', CourseSchema)

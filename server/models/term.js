@@ -1,17 +1,14 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
 const TermSchema = new Schema({
-  year: { type: Number, required: true, min: 1900, max: 9999 },
-  season: {
-    type: String,
-    required: true,
-    enum: ['Fall', 'Summer', 'Winter', 'Stpring']
-  },
-  code: { type: Number, required: true, max: 9999 }
+  code: { type: Number, required: true, max: 9999 },
+  startDate: { type: String, required: true },
+  endDate: { type: String },
+  dateDescription: { type: String, required: true },
+  session: { type: String, required: true },
+  sessionDescription: { type: String, required: true }
 })
-
-TermSchema.virtual('description').get(() => `${this.season} ${this.year}`)
 
 module.exports = mongoose.model('Term', TermSchema)

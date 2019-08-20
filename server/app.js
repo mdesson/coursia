@@ -19,18 +19,18 @@ var app = express()
 var rawConfig = fs.readFileSync('config.json')
 var config = JSON.parse(rawConfig)
 
-// update db
-concordiaAPI.requestData().then(() => console.log('Updated DB')) // around two minutes
-
 // set up mongoose connection
 var mongoose = require('mongoose')
 var mongoDB = `mongodb+srv://${config.dbuser}:${
   config.dbpass
-}@cluster0-nh0xp.mongodb.net/test?retryWrites=true&w=majority`
+}@cluster0-nh0xp.mongodb.net/coursia?retryWrites=true&w=majority`
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+
+// update db
+concordiaAPI.buildCollections().then(() => console.log('Updated DB')) // around two minutes
 
 // middleware
 app.use(cors())

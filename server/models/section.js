@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
@@ -7,7 +7,7 @@ const SectionSchema = new Schema({
   endDate: { type: Date, required: true },
   weekDays: { type: [Boolean], required: true },
   startTime: { type: String },
-  startTime: { type: String },
+  endTime: { type: String },
   room: { type: String },
   building: { type: String },
   campus: {
