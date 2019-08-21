@@ -19,19 +19,15 @@ const termURL = 'https://opendata.concordia.ca/API/v1/course/session/filter/*/*/
 const scheduleURL = 'https://opendata.concordia.ca/API/v1/course/schedule/filter/*/*/*'
 const courseURL = ' https://opendata.concordia.ca/API/v1/course/catalog/filter/*/*/*'
 
-const updateClassRegistration = async () => {
-  console.log('Update Class registration')
-}
-
-const requestData = async () => {
+const requestData = async collections => {
   try {
     console.log('Querying API for all data')
     console.log('This typically takes approximately two minutes')
 
-    const descriptionRes = await axios.get(descriptionURL, { auth })
-    const termRes = await axios.get(termURL, { auth })
-    const scheduleRes = await axios.get(scheduleURL, { auth })
-    const courseRes = await axios.get(courseURL, { auth })
+    let termRes = collections.includes('terms') ? await axios.get(termURL, { auth }) : { data: [] }
+    const descriptionRes = collections.includes('courses') ? await axios.get(descriptionURL, { auth }) : { data: [] }
+    const courseRes = collections.includes('courses') ? await axios.get(courseURL, { auth }) : { data: [] }
+    const scheduleRes = collections.includes('sections') ? await axios.get(scheduleURL, { auth }) : { data: [] }
 
     console.log('Request complete')
 
@@ -46,6 +42,10 @@ const requestData = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const updateClassRegistration = async () => {
+  console.log('Update Class registration')
 }
 
 const updateTerms = async data => {
@@ -76,11 +76,56 @@ const updateTerms = async data => {
   }
 }
 
+const updateCourses = async data => {
+  console.log('Creating course objects')
+  // Create map of descriptions by Id
+  let descriptions = new Object()
+  data.descriptions.map(description => (descriptions[description.ID] = description.description))
+
+  // create instatiate objects
+  const courses = data.courses
+    .filter(course => course.career === 'UGRD')
+    .map(
+      course =>
+        new Course({
+          courseId: course.ID,
+          name: course.title,
+          subjectCode: course.subject,
+          numberCode: course.catalog,
+          description: descriptions[course.ID],
+          degreeLevel: course.career,
+          credits: Number(course.classUnit),
+          components: ['array of strings: Not in json, will have to be gathered from sessions']
+          // prerequisites: ['array of ObjectIds? Will have to go in second iteration'],
+          // equivalencies: ['array of ObjectIds? Will have to go in second iteration']
+        })
+    )
+
+  console.log('Saving to Mongo')
+  for (let course of courses) {
+    const query = await Course.find({ courseId: Number(course.ID) }).exec()
+    if (query.length) {
+      Course.updateOne({ courseId: Number(course.ID) }, course)
+    } else {
+      course.save(err => {
+        if (err) console.log(err)
+      })
+    }
+  }
+}
+
 const concordiaAPI = {
-  buildCollections: async () => {
-    const data = await requestData()
-    console.log('Processing term data and saving to mongo')
-    Promise.all([updateTerms(data)])
+  updateAll: async () => {
+    const data = await requestData(['terms', 'courses', 'sessions'])
+    Promise.all([updateTerms(data), updateCourses(data)])
+  },
+  updateTerms: async () => {
+    const data = await requestData(['terms'])
+    await updateTerms(data)
+  },
+  updateCourses: async () => {
+    const data = await requestData(['courses'])
+    await updateTerms(data)
   }
 }
 
