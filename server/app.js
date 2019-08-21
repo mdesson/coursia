@@ -10,7 +10,7 @@ var fs = require('fs')
 var indexRouter = require('./routes/index')
 var testRouter = require('./routes/test')
 
-// test script
+// Concordia API methods
 var concordiaAPI = require('./public/javascripts/concordiaAPI')
 
 var app = express()
@@ -29,8 +29,8 @@ mongoose.Promise = global.Promise
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
-// update db
-concordiaAPI.buildCollections().then(() => console.log('Updated DB')) // around two minutes
+// update db if update is in argument variables
+if (process.argv.includes('update')) concordiaAPI.buildCollections().then(() => console.log('Updated DB')) // eslint-disable-line
 
 // middleware
 app.use(cors())
@@ -38,7 +38,7 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public'))) // eslint-disable-line
 
 // routes
 app.use('/test', testRouter)
