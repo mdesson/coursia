@@ -7,7 +7,7 @@ const CourseSchema = new Schema({
   name: { type: String, required: true, max: 1 },
   subjectCode: { type: String, required: true, max: 1 },
   numberCode: { type: String, required: true, max: 1 },
-  description: { type: String, required: true },
+  description: { type: String },
   degreeLevel: {
     type: String,
     required: true,

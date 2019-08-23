@@ -95,7 +95,7 @@ const updateCourses = async data => {
           description: descriptions[course.ID],
           degreeLevel: course.career,
           credits: Number(course.classUnit),
-          components: ['array of strings: Not in json, will have to be gathered from sessions']
+          components: ['array of strings: Not in json, will have to be gathered from sections']
           // prerequisites: ['array of ObjectIds? Will have to go in second iteration'],
           // equivalencies: ['array of ObjectIds? Will have to go in second iteration']
         })
@@ -116,7 +116,7 @@ const updateCourses = async data => {
 
 const concordiaAPI = {
   updateAll: async () => {
-    const data = await requestData(['terms', 'courses', 'sessions'])
+    const data = await requestData(['terms', 'courses', 'sections'])
     Promise.all([updateTerms(data), updateCourses(data)])
   },
   updateTerms: async () => {
@@ -125,7 +125,11 @@ const concordiaAPI = {
   },
   updateCourses: async () => {
     const data = await requestData(['courses'])
-    await updateTerms(data)
+    await updateCourses(data)
+  },
+  updateSections: async () => {
+    const data = await requestData(['sections'])
+    // await updateSections(data)
   }
 }
 

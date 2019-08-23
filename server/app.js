@@ -33,7 +33,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 if (process.argv.includes('updateAll')) concordiaAPI.updateAll().then(() => console.log('Updated DB')) // eslint-disable-line
 if (process.argv.includes('updateTerms')) concordiaAPI.updateTerms().then(() => console.log('Updated Terms')) // eslint-disable-line
 if (process.argv.includes('updateCourses')) concordiaAPI.updateCourses().then(() => console.log('Updated Courses')) // eslint-disable-line
-if (process.argv.includes('updateSessions')) concordiaAPI.updateSessions().then(() => console.log('Updated Sessions')) // eslint-disable-line
+if (process.argv.includes('updateSections')) concordiaAPI.updateSections().then(() => console.log('Updated Sections')) // eslint-disable-line
 
 // middleware
 app.use(cors())
