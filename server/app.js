@@ -30,6 +30,7 @@ var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 // update db if update is in argument variables
+// eslint disable to avoid process undefined error
 if (process.argv.includes('updateAll')) concordiaAPI.updateAll().then(() => console.log('Updated DB')) // eslint-disable-line
 if (process.argv.includes('updateTerms')) concordiaAPI.updateTerms().then(() => console.log('Updated Terms')) // eslint-disable-line
 if (process.argv.includes('updateCourses')) concordiaAPI.updateCourses().then(() => console.log('Updated Courses')) // eslint-disable-line

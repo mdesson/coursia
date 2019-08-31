@@ -77,6 +77,10 @@ const updateTerms = async data => {
 }
 
 const updateCourses = async data => {
+  console.log('Creating array of existing courseIds')
+  let existingCourseIds = await Course.find({}, 'courseId').exec()
+  existingCourseIds = existingCourseIds.map(course => course.courseId)
+
   console.log('Creating course objects')
   // Create map of descriptions by Id
   let descriptions = new Object()
@@ -96,18 +100,93 @@ const updateCourses = async data => {
           degreeLevel: course.career,
           credits: Number(course.classUnit),
           components: ['array of strings: Not in json, will have to be gathered from sections']
-          // prerequisites: ['array of ObjectIds? Will have to go in second iteration'],
-          // equivalencies: ['array of ObjectIds? Will have to go in second iteration']
+          // TODO: prerequisites: ['array of ObjectIds? Will have to go in second iteration'],
+          // TODO: equivalencies: ['array of ObjectIds? Will have to go in second iteration']
         })
     )
 
   console.log('Saving to Mongo')
   for (let course of courses) {
-    const query = await Course.find({ courseId: Number(course.ID) }).exec()
-    if (query.length) {
-      Course.updateOne({ courseId: Number(course.ID) }, course)
+    if (existingCourseIds.includes(course.courseId)) {
+      Course.updateOne({ courseId: course.courseId }, course)
     } else {
       course.save(err => {
+        if (err) console.log(err)
+      })
+    }
+  }
+}
+
+const updateSections = async data => {
+  console.log('Creating Term Map')
+  let terms = await Term.find({}, '_id code', (err, res) => {
+    if (err) console.log(err)
+    else return res
+  })
+  let termMap = {}
+  terms.map(term => (termMap[term.code] = term._id))
+
+  console.log('Creating Course Map')
+  let courses = await Course.find({}, '_id courseId', (err, res) => {
+    if (err) console.log(err)
+    else return res
+  })
+  let courseMap = {}
+  courses.map(course => (courseMap[course.courseId] = course._id))
+
+  console.log('Creating array of existing class numbers')
+  let existingClassNumbers = await Section.find({}, 'classNumber', (err, res) => {
+    if (err) console.log(err)
+    else return res
+  })
+
+  existingClassNumbers = existingClassNumbers.map(section => section.classNumber)
+
+  console.log('Creating section objects')
+  let sections = new Array()
+  const schedules = data.schedules.filter(schedule => schedule.career === 'Undergraduate')
+
+  for (let schedule of schedules) {
+    if (courseMap[schedule.courseID]) {
+      const section = await new Section({
+        weekDays: [
+          schedule.mondays === 'Y',
+          schedule.tuesdays === 'Y',
+          schedule.wednesdays === 'Y',
+          schedule.thursdays === 'Y',
+          schedule.fridays === 'Y',
+          schedule.saturdays === 'Y',
+          schedule.sundays === 'Y'
+        ],
+        startTime: schedule.classStartTime.replace('.', ':'),
+        endTime: schedule.classEndTime.replace('.', ':'),
+        room: schedule.room,
+        building: schedule.buildingCode,
+        campus: schedule.locationCode,
+        status: schedule.classStatus,
+        classNumber: schedule.classNumber,
+        component: schedule.componentCode,
+        section: schedule.section,
+        courseId: schedule.courseID,
+        enrollmentCapacity: schedule.enrollmentCapacity,
+        enrollmentTotal: schedule.currentEnrollment,
+        waitCapacity: schedule.waitlistCapacity,
+        waitTotal: schedule.currentWaitlistTotal,
+        termCode: schedule.termCode,
+        sessionCode: schedule.session,
+        term: termMap[schedule.termCode],
+        course: courseMap[schedule.courseID]
+      })
+      sections.push(section)
+    }
+  }
+
+  console.log('Saving to Mongo')
+  for (let section of sections) {
+    if (existingClassNumbers.includes(section.classNumber)) {
+      Section.updateOne({ classNumber: section.classNumber }, section)
+    } else {
+      section.save(err => {
         if (err) console.log(err)
       })
     }
@@ -117,7 +196,7 @@ const updateCourses = async data => {
 const concordiaAPI = {
   updateAll: async () => {
     const data = await requestData(['terms', 'courses', 'sections'])
-    Promise.all([updateTerms(data), updateCourses(data)])
+    Promise.all([updateTerms(data), updateCourses(data), updateSections(data)])
   },
   updateTerms: async () => {
     const data = await requestData(['terms'])
@@ -129,7 +208,7 @@ const concordiaAPI = {
   },
   updateSections: async () => {
     const data = await requestData(['sections'])
-    // await updateSections(data)
+    await updateSections(data)
   }
 }
 
