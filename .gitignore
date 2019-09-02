@@ -65,3 +65,4 @@ typings/
 
 # apikeys and other secrets
 config.json
+config.js

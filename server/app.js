@@ -8,7 +8,7 @@ var fs = require('fs')
 
 // routes
 var indexRouter = require('./routes/index')
-var testRouter = require('./routes/test')
+var apiRouter = require('./routes/courses')
 
 // Concordia API methods
 var concordiaAPI = require('./public/javascripts/concordiaAPI')
@@ -21,9 +21,7 @@ var config = JSON.parse(rawConfig)
 
 // set up mongoose connection
 var mongoose = require('mongoose')
-var mongoDB = `mongodb+srv://${config.dbuser}:${
-  config.dbpass
-}@cluster0-nh0xp.mongodb.net/coursia?retryWrites=true&w=majority`
+var mongoDB = `mongodb+srv://${config.dbuser}:${config.dbpass}@cluster0-nh0xp.mongodb.net/coursia?retryWrites=true&w=majority`
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
 var db = mongoose.connection
@@ -45,7 +43,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public'))) // eslint-disable-line
 
 // routes
-app.use('/test', testRouter)
+app.use('/api', apiRouter)
 app.use('/', indexRouter)
 
 // catch 404 and forward to error handler

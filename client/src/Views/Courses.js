@@ -1,5 +1,14 @@
+// libraries
 import React from 'react'
+import axios from 'axios'
+
+// config file
+import config from '../config'
+
+// comonents
 import Course from '../Components/Course'
+
+const getCourses = async () => await axios.get(`${config.apiUrl}/courses`)
 
 const Courses = () => {
   const testCourse = {
@@ -13,8 +22,11 @@ const Courses = () => {
     components: ['LAB', 'LEC', 'TUT']
   }
 
+  const courses = getCourses().then(({ data }) => console.log(data))
+
   return (
     <div className="courseList">
+      {getCourses().then(courses => courses.map(course => <div key={course._id}>{course.name}</div>))}
       <Course {...testCourse} />
       <Course {...testCourse} />
       <Course {...testCourse} />
