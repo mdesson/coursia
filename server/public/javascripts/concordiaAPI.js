@@ -46,6 +46,7 @@ const requestData = async collections => {
 
 const updateClassRegistration = async () => {
   console.log('Update Class registration')
+  // TODO: Add class registration update
 }
 
 const updateTerms = async data => {
