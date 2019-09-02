@@ -1,23 +1,19 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+// libraries
+import React from 'react'
 
+// components
+import TopBar from './Components/TopBar'
+import MenuButtons from './Components/MenuButtons'
+
+// styles
 import './App.css'
 
 function App() {
-  const [testText, setTestText] = useState('inital')
-
-  const serverGET = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/test')
-      setTestText(response.data.hello)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   return (
-    <div onClick={serverGET} className="App">
-      <p>{testText}</p>
+    <div className="App">
+      <TopBar />
+      <MenuButtons />
+      <p>hello</p>
     </div>
   )
 }
