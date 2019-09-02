@@ -2,7 +2,7 @@ import React from 'react'
 
 const MenuButtons = () => {
   return (
-    <div class="MenuButtons">
+    <div className="MenuButtons">
       <button>Courses</button>
       <button>Schedule</button>
       <button>Me</button>

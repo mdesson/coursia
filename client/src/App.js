@@ -4,6 +4,7 @@ import React from 'react'
 // components
 import TopBar from './Components/TopBar'
 import MenuButtons from './Components/MenuButtons'
+import Courses from './Views/Courses'
 
 // styles
 import './App.css'
@@ -13,7 +14,9 @@ function App() {
     <div className="App">
       <TopBar />
       <MenuButtons />
-      <p>hello</p>
+      <div className="pageContainer">
+        <Courses />
+      </div>
     </div>
   )
 }

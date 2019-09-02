@@ -1,17 +1,23 @@
+body {
+  background-color: #454545;
+}
+
 .App {
   display: flex;
   flex: 1;
   flex-direction: column;
+  flex-wrap: wrap;
+  color: white;
 }
 
 /* Top Bar */
 .TopBar {
   display: flex;
+  flex-wrap: wrap;
   flex: 1;
   flex-direction: row;
   background-color: #e04e4d;
   padding: 0.5rem;
-  color: white;
   align-items: center;
 }
 
@@ -34,19 +40,80 @@
 /* Menu Buttons */
 .MenuButtons {
   display: flex;
-  padding: 1.25rem;
   flex-direction: row;
+  flex-wrap: wrap;
+  padding: 1.25rem;
   justify-content: space-evenly;
 }
 
 .MenuButtons button {
-  background-color: #2b6b94;
+  background-color: #2a7bad;
   border: none;
   color: white;
-  padding: 5px 35px;
+  padding: 5px;
   border-radius: 1rem;
-  text-align: center;
   font-weight: bold;
   font-size: 16px;
-  width: 15%;
+  width: 10%;
+}
+
+/* Page Container */
+.pageContainer {
+  padding: 1rem;
+}
+
+/* Courses View */
+.courseList {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1;
+  padding: 0.5rem;
+}
+
+/* Course component */
+.card {
+  flex: 1;
+  border-style: solid;
+  border-width: 0.1rem;
+  border-color: black;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  flex-basis: 40%;
+  background-color: white;
+  color: black;
+}
+
+.card .header {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.3rem 0.1rem;
+}
+
+.card .name {
+  color: #2b6b94;
+  font-size: 1.25rem;
+}
+
+.card .description {
+  font-size: 0.9rem;
+}
+
+.card .components {
+  padding-bottom: 0.25rem;
+}
+
+.card .prereqs {
+  padding-bottom: 0.25rem;
+}
+
+.card .equivs {
+  /* none */
 }
