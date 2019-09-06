@@ -63,6 +63,8 @@ typings/
 # vscode information
 .vscode
 
-# apikeys and other secrets
+# serverside configuration and secrets
 config.json
+
+# clientside configuration
 config.js
