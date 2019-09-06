@@ -3,7 +3,7 @@ import React from 'react'
 import axios from 'axios'
 
 // config file
-import config from '../config'
+import { config } from '../config'
 
 // comonents
 import Course from '../Components/Course'
@@ -26,7 +26,6 @@ const Courses = () => {
 
   return (
     <div className="courseList">
-      {getCourses().then(courses => courses.map(course => <div key={course._id}>{course.name}</div>))}
       <Course {...testCourse} />
       <Course {...testCourse} />
       <Course {...testCourse} />
