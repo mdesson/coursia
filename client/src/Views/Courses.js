@@ -22,7 +22,7 @@ const Courses = () => {
     components: ['LAB', 'LEC', 'TUT']
   }
 
-  const courses = getCourses().then(({ data }) => console.log(data))
+  const courses = getCourses()
 
   return (
     <div className="courseList">
