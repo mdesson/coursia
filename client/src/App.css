@@ -84,7 +84,7 @@ body {
   margin: 0.5rem;
   flex-basis: 40%;
   background-color: white;
-  color: black;
+  color: #454545;
 }
 
 .card .header {
@@ -98,7 +98,7 @@ body {
 }
 
 .card .name {
-  color: #2b6b94;
+  color: #2a7bad;
   font-size: 1.25rem;
 }
 
